@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Triangle Pattern</title>
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+}
+</style>
+    </head>
+
+    <body>
+        <canvas id="myCanvas"></canvas>
+
+        <script>
+
+// TODO: add resize event handler
+
+const canvas = document.getElementById("myCanvas")
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const ctx = canvas.getContext('2d');
+
+const nr = 10;
+const nc = 20;
+const vs = canvas.height/nr;
+const hs = canvas.width/nc;
+
+let points = [];
+let colors = [];
+let offsets = [];
+let offset_dirs = [];
+let points_offset = [];
+
+for (let r = 0; r < nr; r++) {
+    for (let c = 0; c < nc; c++) {
+        //points.push({x: c*hs + xr, y: r*vs + yr});
+        points[r*nc+c] = {x: c*hs, y: r*vs};
+    }
+}
+
+for (let r = 0; r < nr; r++) {
+    for (let c = 0; c < nc; c++) {
+        //points.push({x: c*hs + xr, y: r*vs + yr});
+        colors[(r*nc+c)*2+0] = Math.floor(Math.random()*20 + 180);
+        colors[(r*nc+c)*2+1] = Math.floor(Math.random()*20 + 180);
+    }
+}
+
+for (let r = 0; r < nr; r++) {
+    for (let c = 0; c < nc; c++) {
+        const xr = (Math.random()-0.5)*20;
+        const yr = (Math.random()-0.5)*20;
+        offsets[r*nc+c] = {x: xr, y: yr};
+        offset_dirs[r*nc+c] = {x: 0, y: 0};
+    }
+}
+
+function update_offsets() {
+    for (let r = 0; r < nr; r++) {
+        for (let c = 0; c < nc; c++) {
+            offset_dirs[r*nc+c].x += (Math.random()-0.5)*1;
+            offset_dirs[r*nc+c].y += (Math.random()-0.5)*1;
+        }
+    }
+    for (let r = 0; r < nr; r++) {
+        for (let c = 0; c < nc; c++) {
+            offsets[r*nc+c].x += offset_dirs[r*nc+c].x;
+            offsets[r*nc+c].y += offset_dirs[r*nc+c].y;
+        }
+    }
+    for (let r = 0; r < nr; r++) {
+        for (let c = 0; c < nc; c++) {
+            points_offset[r*nc+c] = {x: points[r*nc+c].x + offsets[r*nc+c].x, y: points[r*nc+c].y + offsets[r*nc+c].y};
+        }
+    }
+}
+
+function draw() {
+    for (let r = 0; r < nr-1; r++) {
+        for (let c = 0; c < nc-1; c++) {
+            //const hue0 = Math.floor(160+(r*nc*2+c*2)/8);
+            //const hue1 = Math.floor(160+(r*nc*2+c*2+1)/8);
+            // TODO: use diamond-square, perlin noise, or something
+            const hue0 = colors[(r*nc+c)*2+0];
+            const hue1 = colors[(r*nc+c)*2+1];
+
+            const p0 = points_offset[r*nc+c];
+            const p1 = points_offset[r*nc+c+1];
+            const p2 = points_offset[(r+1)*nc+c];
+            const p3 = points_offset[(r+1)*nc+c+1];
+
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            //ctx.moveTo(c*hs, r*vs);
+            //ctx.lineTo((c+1)*hs, r*vs);
+            //ctx.lineTo(c*hs, (r+1)*vs);
+            ctx.closePath();
+            ctx.fillStyle = `hsl(${hue0}, 50%, 50%)`;
+            ctx.strokeStyle = ctx.fillStyle;
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
+            //ctx.moveTo((c+1)*hs, r*vs);
+            //ctx.lineTo(c*hs, (r+1)*vs);
+            //ctx.lineTo((c+1)*hs, (r+1)*vs);
+            ctx.closePath();
+            ctx.fillStyle = `hsl(${hue1}, 50%, 50%)`;
+            ctx.strokeStyle = ctx.fillStyle;
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+}
+
+setInterval(function() {
+    update_offsets();
+    draw();
+    console.log('.');
+}, 16);
+        </script>
+    </body>
+
+</html>

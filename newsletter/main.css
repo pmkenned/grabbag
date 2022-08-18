@@ -1,0 +1,73 @@
+body {
+    max-width: 900px;
+    width: 90%;
+    margin: auto;
+    margin-top: 2rem;
+    font-family: Georgia;
+    /*font-family: Helvetica;*/
+    text-align: justify;
+    font-size: 1.0em;
+}
+
+span.issue {
+    float: left;
+}
+
+span.date {
+    float: right;
+}
+
+p.name {
+    font-weight: bold;
+}
+
+span.bold {
+    font-weight: bold;
+}
+
+h1 {
+    margin: 0;
+    text-align: center;
+}
+
+h2 {
+    margin-top: 0;
+    text-align: left;
+}
+
+article {
+    clear: both;
+    column-count: 2;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+/*    border: 1px solid red;*/
+}
+
+img {
+    float: left;
+    width: 15vw;
+    margin-right: 1em
+}
+
+@media only screen and (max-width: 600px) {
+    article {
+        column-count: 1;
+    }
+}
+
+@media print {
+    body {
+        font-size: 11pt;
+    }
+    article {
+        /*page-break-after: always;*/
+    }
+    a {
+        color: black;
+        /*text-decoration: none;*/
+        /*text-decoration-style: dashed;*/
+    }
+    img {
+        width: 25vw;
+    }
+}
